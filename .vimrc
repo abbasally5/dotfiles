@@ -73,6 +73,7 @@ inoremap jj <Esc>
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
+let &t_ut=''
 
 "Clang path"
 let g:clang_library_path='~/.vim/plugin/clang/'
