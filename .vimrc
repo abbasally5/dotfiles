@@ -98,6 +98,9 @@ function CustomTagHighlight()
 endfunction
 au Syntax c,cpp call CustomTagHighlight()
 
+"This unsets the "last search pattern" register by hitting return
+nnoremap <CR> :noh<CR><CR>
+
 " Clang compilation options file for Syntastic (if needed)
 let g:syntastic_c_config_file = '.clang_complete'
 let g:syntastic_cpp_config_file = '.clang_complete'
