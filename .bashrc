@@ -43,7 +43,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-force_color_prompt=yes
+#force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -57,7 +57,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[38;5;9m\]\w\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -113,171 +113,31 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# finally, a place for all my stuff
-hostname=$(hostname)
-case "$hostname" in
-    "MONOLITH-RETURNS")
-        dropbox="/mnt/e/Dropbox/"
-        onedrive="/mnt/e/OneDrive/"
-        workspace="/mnt/c/workspace/" ;;
-    "STRYDER-PHOENIX")
-        dropbox="/mnt/c/Users/Brian/Dropbox/"
-        onedrive="/mnt/c/Users/Brian/OneDrive/"
-        workspace="/mnt/c/Workspace/" ;;
-    "QUICKSILVER")
-        dropbox="/mnt/c/Users/brian/Dropbox/"
-        onedrive="/mnt/c/Users/brian/OneDrive/"
-        workspace="/mnt/c/workspace/" ;;
-    "X1")
-        dropbox="/mnt/c/Users/brian/Dropbox/"
-        onedrive="/mnt/c/Users/brian/OneDrive/"
-        workspace="/mnt/c/Users/brian/workspace/" ;;
-    "ubuntu-quicksilver")
-        workspace="/home/brian/workspace/" ;;
-    "ubuntu-monolith-returns")
-        workspace="/home/brian/workspace/" ;;
-esac
-
-export dropbox
-export onedrive
-export workspace
-
-# always ls after cd
-function cd {
-    builtin cd "$@" && ls -F
-}
-
-# make a directory and cd
-function mkcd {
-    mkdir "$@" -p && builtin cd "$@"
-}
-
-# trim whitespace in a file
-function tws {
-    sed -i 's/[[:space:]]*$//' "$@"
-}
-
-# grep through history
-function hgrep {
-    history | grep "$@" | head -n -1
-}
-
-# what's my ip?
-function whatsmyip {
-    ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/'
-}
-
-# mount a VirtualBox shared folder
-function vbmount {
-    if [[ $# -eq 0 ]] ; then
-        echo "usage: vbmount <SHARED-DIR-NAME> <LOCAL-DIR>"
-        return
-    fi
-    mkdir -p "$2" && sudo mount -t vboxsf -o uid=$UID,gid=$(id -g) "$1" "$2"
-}
-
-# print on the CS lab machine
-# usage: `csprint <FILE> <printer-number> [d]`
-function csprint {
-    # $0 will be /bin/bash
-    # $1 will be filename
-    # $2 will be printer number
-    # $3 if set to "d", prints double sided
-    if [[ $# -eq 0 ]] ; then
-        echo "usage: csprint <FILE> <printer-number> [d]"
-        return
-    fi
-
-    if [[ "$(hostname -f)" == *'cs.utexas.edu'* ]]; then
-        echo "On a lab machine."
-        return
-    fi
-
-    lfilepath="$1"
-    host="briancui@linux.cs.utexas.edu"
-    printtmp="~/printout"
-
-    # Copy local file into remote directory
-    ssh "$host" "mkdir -p $printtmp"
-    scp "$1" "$host:$printtmp"
-
-    # Create print command
-    rfilepath="${printtmp}/$(basename $lfilepath)"
-    print="lpr -Plw${2} ${rfilepath} -o sides="
-    if [[ "$3" == "d" ]]; then
-        print+="two-sided-long-edge"
-    else
-        print+="one-sided"
-    fi
-
-    # Invoke command remotely
-    ssh "$host" "$print; rm $rfilepath"
-    echo "$host:$print"
-}
-
-# git related aliases
-function ga {
-    git add "$@" && git status
-}
-
-function gcm {
-    git commit -m "$@" && git status
-}
-
-function gs {
-    git status "$@"
-}
-
-function gra {
-    git remote add "$@"
-}
-
-function gp {
-    git push "$@"
-}
-
-function gpush {
-    git push "$@"
-}
-
-function gpull {
-    git pull "$@"
-}
-
-function gd {
-    git diff "$@"
-}
-
-function gb {
-    git branch "$@"
-}
-
-function gba {
-    git branch -a "$@"
-}
-
-function gcloneme {
-    if [[ $# -eq 0 ]] ; then
-        echo "usage: gcloneme <repo-name>"
-        return
-    fi
-
-    git clone "git@github.com:theBrianCui/${1}.git"
-}
-
-# clipboard aliases
-alias setclip="xclip -selection c"
-alias getclip="xclip -selection c -o"
-
-# get that ssh-agent going
-ssh_agent_pid=$(pgrep -u $(whoami) ssh-agent)
-if [ ! -S ~/.ssh/ssh_auth_sock ] || [ -z "$ssh_agent_pid" ] ; then
-  eval `ssh-agent`
-  ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
+# Bash Completion
+if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
 fi
-export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
-ssh-add -l > /dev/null || ssh-add
 
-#eval $(ssh-agent)
-#ssh-add
-dottest='Success!'
+export PS1='\[\033[01;32m\]\u@\h\[\033[01;34m\] \w\[\033[01;33m\]$(__git_ps1)\[\033[01;34m\] \$\[\033[00m\] '
+export GIT_PS1_SHOWDIRTYSTATE=1
+#export TERM='xterm-256color'
+#alias tmux="TERM=screen-256color-bce tmux"
+
+export GOROOT=/usr/local/go
+export GOPATH=/home/abbas/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export ANDROID_HOME=/home/abbas/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+
+alias sv="source venv/bin/activate"
+
+# virtualenv and virutalenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+#source /usr/local/bin/virtualenvwrapper.sh
+export PATH=/home/abbas/boost_1_54_0/tools/build/v2/build/bin:$PATH 
+export LD_LIBRARY_PATH=/home/abbasa/boost_1_54_0/stage/lib/:$LD_LIBRARY_PATH
+#export LD_LIBRARY_PATH=~/python3.4/lib/:$LD_LIBRARY_PATH
+
+# Start VPN on boot
+alias vpn="expressvpn"
+

@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/abbas/.ssh'
+let g:netrw_dirhist_2='/home/abbas/Documents/repos/hostess/config'
+let g:netrw_dirhist_3='/home/abbas/.config'
+let g:netrw_dirhist_4='/home/abbas/Documents/repos/lxcfs/autom4te.cache'
+let g:netrw_dirhist_5='/home/abbas/Documents/repos/woodstocks'
