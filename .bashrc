@@ -139,5 +139,6 @@ export LD_LIBRARY_PATH=/home/abbasa/boost_1_54_0/stage/lib/:$LD_LIBRARY_PATH
 #export LD_LIBRARY_PATH=~/python3.4/lib/:$LD_LIBRARY_PATH
 
 # Start VPN on boot
-alias vpn="expressvpn"
+#alias vpn="expressvpn"
 
+source ~/.git-prompt.sh
