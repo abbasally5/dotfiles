@@ -139,6 +139,36 @@ export LD_LIBRARY_PATH=/home/abbasa/boost_1_54_0/stage/lib/:$LD_LIBRARY_PATH
 #export LD_LIBRARY_PATH=~/python3.4/lib/:$LD_LIBRARY_PATH
 
 # Start VPN on boot
-#alias vpn="expressvpn"
+alias vpn="expressvpn"
 
 source ~/.git-prompt.sh
+
+export PATH="$PATH:/usr/lib/dart/bin"
+export PATH="$PATH:/usr/local/flutter/bin"
+
+ISTIO_USERNAME="abbasally5"
+
+# This defines the docker hub to use when running integration tests and building docker images
+# eg: HUB="docker.io/istio", HUB="gcr.io/istio-testing"
+export HUB="docker.io/$ISTIO_USERNAME"
+
+# This defines the docker tag to use when running integration tests and
+# building docker images to be your user id. You may also set this variable
+# this to any other legitimate docker tag.
+export TAG=$ISTIO_USERNAME
+
+# This defines a shortcut to change directories to $HOME/istio.io
+export ISTIO=$HOME/istio.io
+
+complete -W "\`find . -iname \"?akefil*\" | xargs -I {} grep -hoE '^[a-zA-Z0-9_.-]+:([^=]|$)' {} | sed 's/[^a-zA-Z0-9_.-]*$//' | sort -u\`" make
+
+export PATH="$PATH:~/.local/bin"
+export PATH="$PATH:/usr/local/lib/node_modules"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+source /home/abbas/Documents/repos/openpilot/tools/openpilot_env.sh
+
+export PATH="$PATH:/usr/local/Bento4/bin"
