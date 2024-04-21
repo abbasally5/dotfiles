@@ -25,3 +25,6 @@
 [submodule ".vim/bundle/vim-snipmate"]
 	path = .vim/bundle/vim-snipmate
 	url = https://github.com/garbas/vim-snipmate.git
+[submodule ".tmux/plugins/tpm"]
+	path = .tmux/plugins/tpm
+	url = git@github.com:tmux-plugins/tpm.git
